@@ -10,10 +10,13 @@
 <body>
 	<div class="container">
 		<h1>GIFAPI Topic Search</h1>
-		<button data-comic="adventure time">adventure</button>
-  	    <button data-comic="archer">archer</button>
-        <button data-comic="futurama">futurama</button>
-  
+		
+        <!-- Rendered Buttons will get Dumped here-->
+        <div id="buttonsView">	
+		 <!--button data-comic="adventure time">adventure</button>
+  	     <button data-comic="archer">archer</button>
+         <button data-comic="futurama">futurama</button-->
+        </div>
 
 		<!-- gifs will get dumped here-->
 		<div id="gifs-appear-here">
@@ -28,6 +31,10 @@
 		 <input id="gifTopics" type="submit" value="Submit">
 			
 		</form>
+
+		<!-- Button triggers new topics to be added -->
+		<div id="topicsView">	
+		</div>
 	<script src='http://code.jquery.com/jquery-2.1.3.min.js'></script>
 	<script src='assets/js/app.js'</script>
 	</div>
