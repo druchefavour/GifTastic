@@ -1,0 +1,36 @@
+<!--Week-6 Assignment-->
+<!--Use the GIPHY API to make a dynamic web page that populates with gifs of my choice-->
+<!--Call the GIPHY API and use JavaScript and jQuery to change the HTML of the site-->
+<!DOCTYPE html>
+<html>
+<head>
+	<title>GifTastic</title>
+	<link rel="stylesheet" type="text/css" href="assets/css/style.css">
+</head>
+<body>
+	<div class="container">
+		<h1>GIFAPI Topic Search</h1>
+		<button data-comic="adventure time">adventure</button>
+  	    <button data-comic="archer">archer</button>
+        <button data-comic="futurama">futurama</button>
+  
+
+		<!-- gifs will get dumped here-->
+		<div id="gifs-appear-here">
+
+		</div>
+
+		<form id="gifTopics-form">
+		 <label for="gifTopics-input"> Add Cartoon-Comic here</label>
+		 <input type="text" id="gifTopics-input"><br>
+
+		 <!-- Button triggers new gif topic to be added -->
+		 <input id="gifTopics" type="submit" value="Submit">
+			
+		</form>
+	<script src='http://code.jquery.com/jquery-2.1.3.min.js'></script>
+	<script src='assets/js/app.js'</script>
+	</div>
+</body>
+</html>
+<script type="text/javascript"></script>
