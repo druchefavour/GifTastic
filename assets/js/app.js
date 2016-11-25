@@ -46,10 +46,10 @@
 	// ========================================================
 
 	// This function handles events where one button is clicked
-	$('#addTopic').on('click', function(){
+	$('#gifTopics').on('click', function(){
 
 		// This line of code will grab the input from the textbox
-		var topic = $('#topic-input').val().trim();
+		var topic = $('#gifTopics-input').val().trim();
 
 		// The movie from the textbox is then added to our array
 		topics.push(topic);
