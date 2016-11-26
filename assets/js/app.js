@@ -75,7 +75,7 @@
 //==============================================================
 
     $("button").on("click", function() {
-      var comic = $(this).data("topics");
+      var comic = $(this).data("comics");
       var queryURL = "http://api.giphy.com/v1/gifs/search?q=" +
       comic + "&api_key=dc6zaTOxFJmzC&limit=10";
 
