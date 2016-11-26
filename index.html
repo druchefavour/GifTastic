@@ -1,39 +1,137 @@
-<!--Week-6 Assignment-  Purpose: Use the GIPHY API to make a dynamic web page that populates with gifs of my choice (Cartoon Comic-->
-
-<!DOCTYPE html>
 <html>
 <head>
 	<title>GifTastic</title>
-	<link rel="stylesheet" type="text/css" href="assets/css/style.css">
+	<style type="text/css">
+		button, div, form, input {
+			margin: 10px;
+		}
+	</style>
 </head>
 <body>
 
-	<div class="container">
-		<h1>GIFTASTIC Cartoon-Comic Search</h1>
-		<!-- Rendered Buttons will get Dumped here-->
-        <div id="buttons-view">	
-        </div>
-       
-        <!-- Topics will get dumped here -->
-        <div id="topics-view">
-        </div>
-		
-		<!-- gifs will get dumped here-->
-		<div id="gifs-appear-here">
-		</div>
+  <div class="container">
+    <h1>GIFTASTIC Cartoon-Comic Search</h1>
 
-		<form id="gifTopics-form">
-			<label for="gifTopics-input"> Add Cartoon-Comic Here</label>
-		 	<input type="text" id="gifTopics-input"><br>
-
-		 	<!-- Button triggers new gif topic to be added -->
-		 	<input id="gifTopics" type="submit" value="Submit">
-			
-		</form>
+    <!-- Topics will Get Dumped Here -->
+    <div id="topics-view">
     </div>
-	
-	<script src='http://code.jquery.com/jquery-2.1.3.min.js'></script>
-	<script src='assets/js/app.js'</script>
+  
+    <!-- Rendered Buttons will get Dumped Here-->
+    <div id="buttons-view">
+    </div>
 
+      <form id="gifTopic-form">
+        <label for="gifTopic-input">Add a Cartoon-Comic</label>
+          <input type="text" id="gifTopic-input"><br>
+    
+          <!-- Button triggers new topic to be added -->
+          <input id="addGifTopic" type="submit" value="Submit">
+      </form>
+
+    <!-- Gifs are dumped here -->
+    <div id="gifs-appear-here">
+    </div>
+  </div>
+
+  <script src='http://code.jquery.com/jquery-2.1.3.min.js'></script>
+  <script type="text/javascript">
+    // Initiate Javascript
+    $(document).ready(function () {
+    // Initial array of comics
+    var topics = ['adventure time', 'archer', 'futurama', 'minions'];// ====================================
+    //Create generic function for dumping JSON (Giphy) content for each button into the div
+    function displayTopicInfo(){
+      var comic = $(this).attr("data-comic");
+      var queryURL = "http://api.giphy.com/v1/gifs/search?q=" + comic + "&api_key=dc6zaTOxFJmzC&limit=10";
+      // ===================================
+      $.ajax({url:queryURL, method: "GET"}).done(function(response) {var topicDiv = $("<div class='comic'>");
+        var imageUrl = response.data.images;
+        var results = response.data;
+        // ===================================
+        //Create a loop over the results to grab images from Giphy API to our html
+        for (var i = 0; i < results.length; i++) {
+          var topicDiv = $('<div>');
+          var rating = results[i].rating;
+          var p = $('<p>').text("Rating: " + rating)
+          var comicImage = $('<img>');
+          comicImage.addClass('gif');
+          comicImage.attr("src", results[i].images.fixed_height.url);
+          comicImage.attr('data-still', results[i].images.fixed_height_still.url);
+          comicImage.attr('data-animate', results[i].images.fixed_height.url);
+          comicImage.attr('data-state', 'still');
+          comicImage.attr("alt", "comic image");
+          topicDiv.prepend(p);
+          topicDiv.append(comicImage);
+          $("#gifs-appear-here").prepend(topicDiv);
+        }
+        //===========================================
+        // Animate the gifs or make them still  by clicking on them 
+        $('.gif').on('click', function () {
+          var state = $(this).attr('data-state');
+          if (state === 'still') {
+            $(this).attr('src', $(this).data('animate'));
+            $(this).attr('data-state', 'animate');
+          }
+          else {
+            $(this).attr('src', $(this).data('still'));
+            $(this).attr('data-state', 'still');
+          }
+        })
+      });
+    }
+    //=======================
+	// Generic function to create buttons for displaying comic data
+  function renderButtons() {
+    //Delete the topic prior to adding new topic
+    $("#buttons-view").empty();
+    //Loop through the array of topics
+    for(var i = 0; i < topics.length; i++) {
+      var a = $("<button>");
+      a.addClass("comic");
+      a.attr("data-comic", topics[i]);
+      a.text(topics[i]);
+      $("#buttons-view").append(a);
+    }
+  }
+  //=====================================
+  // Create a function that handles events where one button is click ed
+  $('#addGifTopic').on('click', function(event) {
+    event.preventDefault();
+    var comic =$('#gifTopic-input').val().trim();
+    topics.push(comic);
+    console.log(comic);
+    renderButtons();
+    return false;
+  });
+  $(document).on('click', '.comic', displayTopicInfo);
+  renderButtons();
+  //===================================
+  //Create button to grab image for the topics in the array from Giphy API and put on html
+  $("button").on("click", function() {
+    var comic = $(this).data("topics");
+    var queryURL = "http://api.giphy.com/v1/gifs/search?q=" + comic + "&api_key=dc6zaTOxFJmzC&limit=10";
+    //===========================================
+    //create another ajax function to grab the images
+    $.ajax({ url: queryURL, method: "GET" }).done(function(response) {// make a variable named results and set it equal to response.data
+      var results = response.data;
+      var imageUrl = results.images;
+      // loop through the results and grab images
+      for (var i = 0; i < results.length; i++) {
+        var topicDiv = $('<div>');
+        var rating = results[i].rating;
+        var p = $('<p>').text("Rating: " + rating);
+        var comicImage = $('<img>');
+        comicImage.attr("src", results[i].images.fixed_height_still.url);
+        comicImage.attr("alt", "comic image");
+        topicDiv.prepend(p);
+        topicDiv.append(comicImage);
+        $("#gifs-appear-here").prepend(topicDiv);
+        //============================================
+      }
+    });
+  });
+})
+//==========================
+</script>
 </body>
 </html>
