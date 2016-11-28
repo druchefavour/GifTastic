@@ -9,7 +9,7 @@
 		}
 	</style>
 </head>
-<body background= "assets/images/giffy_bg.gif" style= "width: 100%; height: 100%"></span>
+<body background= "assets/images/giffy_bg.gif" style= "width: 100%; height: 100%"><span></span>
 
   <div class="container">
     <!-- Create title header : move to the right -->  
@@ -45,55 +45,62 @@
   <!-- ========================================================= -->
   <script type="text/javascript">
     // Initiate Javascript
-    $(document).ready(function () {
+   // $(document).ready(function () {
     // Initial array of comics
-    var topics = ['adventure time', 'archer', 'futurama', 'minions'];// ====================================
-    //Create generic function for dumping JSON (Giphy) content for each button into the div
-    function displayTopicInfo(){
-      var comic = $(this).attr("data-comic");
-      var queryURL = "http://api.giphy.com/v1/gifs/search?q=" + comic + "&api_key=dc6zaTOxFJmzC&limit=10";
-      // ===================================
-      $.ajax({url:queryURL, method: "GET"}).done(function(response) {var topicDiv = $("<div class='comic'>");
-        var imageUrl = response.data.images;
+    // Initial array of movies
+  var topics = ['adventure time', 'archer', 'futurama', 'minions'];
+
+  // ========================================================
+
+  // Generic function for dumping the JSON content for each button into the div
+  function displayTopicInfo(){
+    var comic = $(this).attr("data-comic");
+    var queryURL = "http://api.giphy.com/v1/gifs/search?q=" + comic + "&api_key=dc6zaTOxFJmzC&limit=10";
+    $.ajax({url:queryURL, method: "GET"}).done(function(response) {
+      //$("#topicsView").html(JSON.stringify(response));
+        var topicDiv = $("<div class='comic'>");
+        var rating = response.data.rating;
+        var pOne = $("<p>").text("Rating: " + rating);
+        topicDiv.append(pOne);
+        var imageUrl = response.data.image_original_url;
         var results = response.data;
-        // ===================================
-        //Create a loop over the results to grab images from Giphy API to our html
+        console.log(results[1]);
         for (var i = 0; i < results.length; i++) {
-          var topicDiv = $('<div>');
-          var rating = results[i].rating;
-          var p = $('<p>').text("Rating: " + rating)
-          var comicImage = $('<img>');
-          comicImage.addClass('gif');
-          comicImage.attr("src", results[i].images.fixed_height.url);
-          comicImage.attr('data-still', results[i].images.fixed_height_still.url);
-          comicImage.attr('data-animate', results[i].images.fixed_height.url);
-          comicImage.attr('data-state', 'still');
-          comicImage.attr("alt", "comic image");
-          topicDiv.prepend(p);
-          topicDiv.append(comicImage);
-          $("#gifs-appear-here").prepend(topicDiv);
-        }
-        //===========================================
-        // Animate the gifs or make them still  by clicking on them 
-        $('.gif').on('click', function () {
-          var state = $(this).attr('data-state');
-          if (state === 'still') {
-            $(this).attr('src', $(this).data('animate'));
-            $(this).attr('data-state', 'animate');
-          }
-          else {
-            $(this).attr('src', $(this).data('still'));
-            $(this).attr('data-state', 'still');
-          }
-        })
-      });
+        var topicDiv = $('<div>');
+          //var = $('<p>');
+          //$('<p>').html(results[i]);
+        var rating = results[i].rating;
+        var p = $('<p>').text("Rating: " + rating)
+        var comicImage = $('<img>');
+        comicImage.addClass('gif');
+        comicImage.attr("src", results[i].images.fixed_height.url);
+        comicImage.attr('data-still', results[i].images.fixed_height_still.url);
+        comicImage.attr('data-animate', results[i].images.fixed_height.url);
+        comicImage.attr('data-state', 'still');
+        //comicImage.attr("src", results[i].images.fixed_width.url);
+        comicImage.attr("alt", "comic image");
+        topicDiv.prepend(p);
+        topicDiv.append(comicImage);
+      $("#gifs-appear-here").prepend(topicDiv);
+     }
+     $('.gif').on('click', function () {
+      var state = $(this).attr('data-state');
+     if (state === 'still') {
+      $(this).attr('src', $(this).data('animate'));
+      $(this).attr('data-state', 'animate');
     }
-    //=======================
-	// Generic function to create buttons for displaying comic data
-  function renderButtons() {
-    //Delete the topic prior to adding new topic
+    else {
+      $(this).attr('src', $(this).data('still'));
+      $(this).attr('data-state', 'still');
+    }
+
+     })
+    });
+  }
+//============
+  // Generic function for displaying movie data 
+  function renderButtons(){
     $("#buttons-view").empty();
-    //Loop through the array of topics
     for(var i = 0; i < topics.length; i++) {
       var a = $("<button>");
       a.addClass("comic");
@@ -102,17 +109,16 @@
       $("#buttons-view").append(a);
     }
   }
-  //=====================================
-  // Create a function that handles events where one button is click ed
-  $('#addGifTopic').on('click', function(event) {
+
+  $('#addTopic').on('click', function(event) {
     event.preventDefault();
-    var comic =$('#gifTopic-input').val().trim();
+    var comic =$('#topic-input').val().trim();
     topics.push(comic);
     console.log(comic);
     renderButtons();
     return false;
   });
-  //$(document).on('click', '.comic', displayTopicInfo);
+  $(document).on('click', '.comic', displayTopicInfo);
   renderButtons();
   //===================================
   //Create button to grab image for the topics in the array from Giphy API and put on html
@@ -132,14 +138,14 @@
         var comicImage = $('<img>');
         comicImage.attr("src", results[i].images.fixed_height_still.url);
         comicImage.attr("alt", "comic image");
-        topicDiv.prepend(p);
-        topicDiv.append(comicImage);
-        $("#gifs-appear-here").prepend(topicDiv);
+    //    topicDiv.prepend(p);
+     //   topicDiv.append(comicImage);
+     //   $("#gifs-appear-here").prepend(topicDiv);
         //============================================
       }
     });
   });
-})
+//})
 //==========================
 </script>
 </body>
